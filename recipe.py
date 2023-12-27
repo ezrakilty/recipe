@@ -91,9 +91,7 @@ def is_unit(str):
 def is_comment(line):
     return re.match(r'^ *#', line) or re.match(r'^[\s]*$', line)
 
-WHOLE_NUMBER_REGEX = r'[0-9]'
-
-FRACTION_PARTS_REGEX = r'([0-9]+ +)?([0-9]+) */ *([0-9]+)'
+FRACTION_PARTS_REGEX = '(?:([0-9]+) )?([0-9]+)/([0-9]+)'
 
 # TODO: Would prefer to use some rational representation & arithmetic
 # for rational quantities, rather than get stuff like "0.33333333 cup oil"
