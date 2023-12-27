@@ -15,13 +15,14 @@ def trim(s):
 # TO DO: depluralization
 
 # To do: support ranges, parentheticals, processing adjectives, mismatched units
-processing_adjective = r' *(diced|grated|chopped|sliced|dried|minced|(freshly *)?ground|sliced|(un)?bleached|boiling|boiled|rinsed|warm|cold)'
+processing_adjective = r' *(diced|grated|chopped|sliced|dried|minced|(freshly(-| )*)?ground|sliced|(un)?bleached|boiling|boiled|rinsed|warm|cold)'
 
 def simplify(typ):
     typ = re.sub(r' *(\([^)]*\))', '', typ)
     typ = re.sub(r', [^,]*,', '', typ)
     typ = re.sub(r', [^,()0-9]*$', '', typ)
-    typ = re.sub(processing_adjective, '', typ)
+    typ = re.sub(processing_adjective, '', typ, flags=re.IGNORECASE)
+    typ = re.sub(r's$', '', typ)  # TODO: fixup this with "stem" below
     return typ
 
 def stem(name):
