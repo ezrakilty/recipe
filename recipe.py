@@ -3,7 +3,6 @@
 import re
 import sys
 
-#fname = '/Users/ezra/Documents/Sunday Family Dinner/dec 2/moroccan ingredients.calca'
 fname = sys.argv[1]
 
 results = {}
@@ -37,7 +36,6 @@ canon_unit = {
     'c': 'cup',
     'pound': 'lb',
     'gram': 'g',
-
     }
 
 def normalize(name):
@@ -62,7 +60,7 @@ def align(uni, uni_stant, qua):
         uni = uni_stant
         return (qua, uni)
     else:
-        print "No conversion to align {} and {}".format(uni_stant, uni)
+        print("No conversion to align {} and {}".format(uni_stant, uni))
         return None
 
 def add(dict, key, qua, uni):
@@ -75,8 +73,8 @@ def add(dict, key, qua, uni):
             continue
         else:
             qua_new, uni_new = x
-            print "Consolidating {} {} and {} {} {} to {} {}".format(
-                qua,uni, qua_stant, uni_stant, typ, qua_new + qua_stant, uni_new)
+            print("Consolidating {} {} and {} {} {} to {} {}".format(
+                qua,uni, qua_stant, uni_stant, typ, qua_new + qua_stant, uni_new))
             dict[key][i] = (qua_new + qua_stant, uni_new)
             return
     dict[key] += [(qua, uni)]
@@ -118,16 +116,16 @@ with open(fname, 'r') as f:
 
         m = re.match(r'(?:.*=> *)?(' + NUMBER_REGEX + r')? *(.*)', line)
         if m == None:
-            print "Ignoring {}".format(line)
+            print("Ignoring {}".format(line))
             continue
 
         (qua, unityp) = m.groups()
-        print qua, unityp
         m = re.match(r'([^ ]*)(.*)', unityp)
         if m == None or not m.groups()[1] or not is_unit(m.groups()[0]):
             uni, typ = '', unityp
         else:
             uni, typ = m.groups()
+
         if uni == None:
             uni = ''
         if qua == None:
@@ -140,14 +138,14 @@ with open(fname, 'r') as f:
             raise Exception("Unknown ingredient '{}' on line '{}'".format(typ, line))
         add(results, typ, qua, uni)
 
-    print "\n# Shopping List"
+    print("\n# Shopping List")
     sorted_results = sorted(results.items())
     for typ, terms in sorted_results:
         for (qua, uni) in terms:
             if abs(qua-int(qua)) < 0.0125:
-                print "{:.0f} {} {}".format(qua, uni, typ)
+                print("{:.0f} {} {}".format(qua, uni, typ))
             else:
-                print "{} {} {}".format(qua, uni, typ)
+                print("{} {} {}".format(qua, uni, typ))
 
 # TODO: Sometimes we see ranges, like "1/4 - 1/2 tbsp salt."
 # Other times that notation might be used for fractions > 1, such as "1 - 1/2 cup broth."
