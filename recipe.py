@@ -25,6 +25,8 @@ def simplify(typ):
     typ = re.sub(r's$', '', typ)  # TODO: fixup this with "stem" below
     return typ
 
+# TODO: fix 'clove' 'of garlic' => 'clove' 'garlic'; deal with "of"s.
+
 def stem(name):
     name = re.sub(r'\.', r'', name)
     name = re.sub(r's$', r'', name)
@@ -87,7 +89,7 @@ def add(dict, key, qua, uni):
 # want to parse that as 1 count of a can-like unit, or as 14 ounces?
 # Either way, it currently doesn't parse.
 def is_unit(str):
-    return re.match(r'cup|can|tbsp|tsp|large|small|medium|stalk|bunch|lb|package|clove|trace|g|gram|oz|fl oz|fluid ounce', normalize(str)) != None
+    return re.match(r'cup|can|tbsp|tsp|large|small|medium|stalk|bunch|lb|package|clove|trace|g|gram|oz|fl oz|fluid ounce|quart|head', normalize(str)) != None
 
 def is_comment(line):
     return re.match(r'^ *#', line) or re.match(r'^[\s]*$', line)
@@ -135,7 +137,7 @@ with open(fname, 'r') as f:
         typ = trim(typ)
         if not re.match(r'[a-zA-Z]', typ):
             raise Exception("Unknown ingredient '{}' on line '{}'".format(typ, line))
-        add(results, typ, qua, uni)
+        add(results, typ, float(qua), uni)
 
     print("\n# Shopping List")
     sorted_results = sorted(results.items())
